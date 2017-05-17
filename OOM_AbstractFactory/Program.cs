@@ -7,187 +7,184 @@ namespace OOM_AbstractFactory
     {
         static void Main(string[] args)
         {
-            TrgovinaČokolade malaTrgovina = new TrgovinaČokolade(new CrvenaTvornicaČokolade());
-            TrgovinaČokolade velikaTrgovina = new TrgovinaČokolade(new LjubičastaTvornicaČokolade());
+            TrgovinaSlatkiša malaTrgovina = new TrgovinaSlatkiša(new CrvenaTvornicaSlatkiša());
+            TrgovinaSlatkiša velikaTrgovina = new TrgovinaSlatkiša(new LjubičastaTvornicaSlatkiša());
             List<IČokolada> mojeČokolade = new List<IČokolada>();
+            List<IKeks> mojiKeksi = new List<IKeks>();
 
-            try { mojeČokolade.AddRange(malaTrgovina.kupiMliječneČokolade(15)); }
+            try { mojeČokolade.AddRange(malaTrgovina.kupiČokolade(2)); }
             catch (ArgumentOutOfRangeException e) { Console.WriteLine("\n" + e.ParamName + "\n"); }
-            try { mojeČokolade.AddRange(malaTrgovina.kupiČokoladeSLješnjacima(2)); }
+            try { mojeČokolade.AddRange(velikaTrgovina.kupiČokolade(1)); }
             catch (ArgumentOutOfRangeException e) { Console.WriteLine("\n" + e.ParamName + "\n"); }
-            try { mojeČokolade.AddRange(velikaTrgovina.kupiMliječneČokolade(1)); }
+
+            try { mojiKeksi.AddRange(malaTrgovina.kupiKekse(3)); }
             catch (ArgumentOutOfRangeException e) { Console.WriteLine("\n" + e.ParamName + "\n"); }
-            try { mojeČokolade.AddRange(velikaTrgovina.kupiČokoladeSLješnjacima(4)); }
+            try { mojiKeksi.AddRange(velikaTrgovina.kupiKekse(2)); }
             catch (ArgumentOutOfRangeException e) { Console.WriteLine("\n" + e.ParamName + "\n"); }
 
             Console.WriteLine("Sve moje čokolade:");
             foreach (IČokolada čokolada in mojeČokolade)
                 Console.WriteLine("\nNaziv: " + čokolada.Naziv + "\nSastojci: " + čokolada.Sastojci);
+            Console.WriteLine("\n\nSvi moji keksi:");
+            foreach (IKeks keks in mojiKeksi)
+                Console.WriteLine("\nNaziv: " + keks.Naziv + "\nTip: " + keks.Tip);
 
             Console.ReadKey();
         }
     }
 
-
+    // "AbstractProductA"
     interface IČokolada
     {
         string Naziv { get; }
         string Sastojci { get; }
     }
 
-
-    class LjubičastaMliječnaČokolada : IČokolada
+    // "AbstractProductB"
+    interface IKeks
     {
-        public LjubičastaMliječnaČokolada()
-        {
-            naziv = "Ljubičasta mliječna čokolada";
-            sastojci = "Kakao 20%, šećer 40%, mlijeko u prahu 40%";
-        }
+        string Naziv { get; }
+        string Tip { get; }
+    }
+
+    // "ConcreteProductA1"
+    class LjubičastaČokolada : IČokolada
+    {
         public string Naziv
         {
-            get { return naziv; }
+            get { return "Ljubičasta čokolada"; }
         }
         public string Sastojci
         {
-            get { return sastojci; }
+            get { return "Kakao 20%, šećer 40%, mlijeko u prahu 40%"; }
         }
-        private string naziv, sastojci;
     }
 
-
-    class LjubičastaČokoladaSLješnjacima : IČokolada
+    // "ConcreteProductA2"
+    class CrvenaČokolada : IČokolada
     {
-        public LjubičastaČokoladaSLješnjacima()
-        {
-            naziv = "Ljubičasta čokolada s lješnjacima";
-            sastojci = "Kakao 20%, šećer 40%, mlijeko u prahu 40%, dodatak: lješnjaci";
-        }
         public string Naziv
         {
-            get { return naziv; }
+            get { return "Crvena čokolada"; }
         }
         public string Sastojci
         {
-            get { return sastojci; }
+            get { return "Kakao 15%, šećer 45%, mlijeko u prahu 40%"; }
         }
-        private string naziv, sastojci;
     }
 
-
-    class CrvenaMliječnaČokolada : IČokolada
+    // "ConcreteProductB1"
+    class LjubičastiKeks : IKeks
     {
-        public CrvenaMliječnaČokolada()
-        {
-            naziv = "Crvena mliječna čokolada";
-            sastojci = "Kakao 15%, šećer 45%, mlijeko u prahu 40%";
-        }
         public string Naziv
         {
-            get { return naziv; }
+            get { return "Ljubičasti keks"; }
         }
-        public string Sastojci
+        public string Tip
         {
-            get { return sastojci; }
+            get { return "čajni"; }
         }
-        private string naziv, sastojci;
     }
 
-
-    class CrvenaČokoladaSLješnjacima : IČokolada
+    // "ConcreteProductB2"
+    class CrveniKeks : IKeks
     {
-        public CrvenaČokoladaSLješnjacima()
-        {
-            naziv = "Crvena čokolada s lješnjacima";
-            sastojci = "Kakao 15%, šećer 45%, mlijeko u prahu 40%, dodatak: lješnjaci";
-        }
         public string Naziv
         {
-            get { return naziv; }
+            get { return "Crveni keks"; }
         }
-        public string Sastojci
+        public string Tip
         {
-            get { return sastojci; }
-        }
-        private string naziv, sastojci;
-    }
-
-
-    interface ITvornicaČokolade
-    {
-        IČokolada napraviMliječnuČokoladu();
-        IČokolada napraviČokoladuSLješnjacima();
-    }
-
-    class LjubičastaTvornicaČokolade : ITvornicaČokolade
-    {
-        public IČokolada napraviMliječnuČokoladu()
-        {
-            return new LjubičastaMliječnaČokolada();
-        }
-
-        public IČokolada napraviČokoladuSLješnjacima()
-        {
-            return new LjubičastaČokoladaSLješnjacima();
+            get { return "vafel"; }
         }
     }
 
-
-    class CrvenaTvornicaČokolade : ITvornicaČokolade
+    // "AbstractFactory"
+    interface ITvornicaSlatkiša
     {
-        public IČokolada napraviMliječnuČokoladu()
+        IČokolada napraviČokoladu();
+        IKeks napraviKeks();
+    }
+
+    // "ConcreteFactory1"
+    class LjubičastaTvornicaSlatkiša : ITvornicaSlatkiša
+    {
+        public IČokolada napraviČokoladu()
         {
-            return new CrvenaMliječnaČokolada();
+            return new LjubičastaČokolada();
         }
 
-        public IČokolada napraviČokoladuSLješnjacima()
+        public IKeks napraviKeks()
         {
-            return new CrvenaČokoladaSLješnjacima();
+            return new LjubičastiKeks();
+        }
+    }
+
+    // "ConcreteFactory2"
+    class CrvenaTvornicaSlatkiša : ITvornicaSlatkiša
+    {
+        public IČokolada napraviČokoladu()
+        {
+            return new CrvenaČokolada();
+        }
+
+        public IKeks napraviKeks()
+        {
+            return new CrveniKeks();
         }
     }
 
 
-    class TrgovinaČokolade
+    // "Client"
+    class TrgovinaSlatkiša
     {
-        public TrgovinaČokolade(ITvornicaČokolade tvornica)
+        public TrgovinaSlatkiša(ITvornicaSlatkiša tvornica)
         {
             this.tvornica = tvornica;
-            željenoStanjeZaliha = 10;
-            zalihaMliječneČokolade = new Stack<IČokolada>();
-            naručiMliječneČokolade();
-            zalihaČokoladeSLješnjacima = new Stack<IČokolada>();
-            naručiČokoladeSLješnjacima();
+            željenoStanjeZalihaČokolade = 10;
+            zalihaČokolade = new Stack<IČokolada>();
+            naručiČokoladeIzTvornice();
+            željenoStanjeZalihaKeksa = 12;
+            zalihaKeksa = new Stack<IKeks>();
+            naručiKekseIzTvornice();
         }
-        public IEnumerable<IČokolada> kupiMliječneČokolade(int količina) {
-            if (količina > zalihaMliječneČokolade.Count)
-                throw new ArgumentOutOfRangeException("Nema dovoljno mliječne čokolade!");
+
+        public IEnumerable<IČokolada> kupiČokolade(int količina) {
+            if (količina > zalihaČokolade.Count)
+                throw new ArgumentOutOfRangeException("Trgovina nema dovoljno čokolade!");
             Stack<IČokolada> artikli = new Stack<IČokolada>();
             for (int i = 0; i < količina; ++i)
-                artikli.Push(zalihaMliječneČokolade.Pop());
-            naručiMliječneČokolade();
+                artikli.Push(zalihaČokolade.Pop());
+            naručiČokoladeIzTvornice();
             return artikli;
         }
-        public IEnumerable<IČokolada> kupiČokoladeSLješnjacima(int količina)
+
+        public IEnumerable<IKeks> kupiKekse(int količina)
         {
-            if (količina > zalihaČokoladeSLješnjacima.Count)
-                throw new ArgumentOutOfRangeException("Nema dovoljno čokolade s lješnjacima!");
-            Stack<IČokolada> artikli = new Stack<IČokolada>();
+            if (količina > zalihaKeksa.Count)
+                throw new ArgumentOutOfRangeException("Trgovina nema dovoljno keksa!");
+            Stack<IKeks> artikli = new Stack<IKeks>();
             for (int i = 0; i < količina; ++i)
-                artikli.Push(zalihaČokoladeSLješnjacima.Pop());
-            naručiČokoladeSLješnjacima();
+                artikli.Push(zalihaKeksa.Pop());
+            naručiKekseIzTvornice();
             return artikli;
         }
-        private void naručiMliječneČokolade()
+
+        private void naručiČokoladeIzTvornice()
         {
-            while(željenoStanjeZaliha > zalihaMliječneČokolade.Count)
-                zalihaMliječneČokolade.Push(tvornica.napraviMliječnuČokoladu());
+            while(željenoStanjeZalihaČokolade > zalihaČokolade.Count)
+                zalihaČokolade.Push(tvornica.napraviČokoladu());
         }
-        private void naručiČokoladeSLješnjacima()
+
+        private void naručiKekseIzTvornice()
         {
-            while (željenoStanjeZaliha > zalihaČokoladeSLješnjacima.Count)
-                zalihaČokoladeSLješnjacima.Push(tvornica.napraviČokoladuSLješnjacima());
+            while (željenoStanjeZalihaKeksa > zalihaKeksa.Count)
+                zalihaKeksa.Push(tvornica.napraviKeks());
         }
-        private ITvornicaČokolade tvornica;
-        private Stack<IČokolada> zalihaMliječneČokolade, zalihaČokoladeSLješnjacima;
-        private int željenoStanjeZaliha;
+
+        private ITvornicaSlatkiša tvornica;
+        private Stack<IČokolada> zalihaČokolade;
+        private Stack<IKeks> zalihaKeksa;
+        private int željenoStanjeZalihaČokolade, željenoStanjeZalihaKeksa;
     }
 }
